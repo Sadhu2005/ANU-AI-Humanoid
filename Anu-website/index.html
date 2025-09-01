@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANU 6.0 Project Showcase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Taupe & Deep Teal -->
+    <!-- Application Structure Plan: The SPA is designed as a thematic, top-down narrative. It starts with a compelling "Why" (the problem), introduces the "What" (ANU 6.0 as the solution), explains the "How" (an interactive architecture diagram), details the "Tech" (the components), and finishes with the "Impact" (the vision and benefits). This structure guides the user logically from the high-level concept to the technical details, making complex information digestible and engaging. -->
+    <!-- Visualization & Content Choices: 
+        1. Architecture Diagram: Report Info (System Architecture/Flow) -> Goal (Organize/Explain) -> Viz (Interactive HTML/CSS Diagram) -> Interaction (Click on a component to display its details in an adjacent panel) -> Justification (Promotes active exploration and progressive information disclosure, which is more effective for learning than a static image) -> Library/Method (Vanilla JS + Tailwind).
+        2. Impact Chart: Report Info (Feasibility & Impact section) -> Goal (Compare/Inform) -> Viz (Dynamic Bar Chart) -> Interaction (Buttons filter the chart to show Social, Economic, or Technical impact) -> Justification (Visually quantifies the project's qualitative benefits, making the impact more tangible and memorable for the audience) -> Library/Method (Chart.js).
+        3. Feature Cards: Report Info (Project Features/Objectives) -> Goal (Inform) -> Viz (Interactive Cards) -> Interaction (Hover animates the card to draw attention) -> Justification (Breaks down key features into scannable, visually appealing chunks, improving readability) -> Library/Method (Tailwind CSS).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .highlight {
+            color: #0d9488; /* teal-600 */
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="text-stone-700">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-stone-800">🤖 ANU 6.0</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#problem" class="text-stone-600 hover:text-teal-600 transition-colors">The Why</a>
+                <a href="#how" class="text-stone-600 hover:text-teal-600 transition-colors">The How</a>
+                <a href="#tech" class="text-stone-600 hover:text-teal-600 transition-colors">The Tech</a>
+                <a href="#impact" class="text-stone-600 hover:text-teal-600 transition-colors">The Impact</a>
+                <a href="#future" class="text-stone-600 hover:text-teal-600 transition-colors">The Future</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+
+        <section id="problem" class="text-center mb-24 fade-in-section">
+            <h2 class="text-4xl md:text-5xl font-bold text-stone-800 mb-6">The Challenge: A Deeper Look</h2>
+            <p class="text-lg md:text-xl text-stone-600 max-w-4xl mx-auto mb-12">
+                For rural students, learning English is more than an academic exercise—it's a gateway to future opportunities. However, several critical barriers stand in their way.
+            </p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-left max-w-6xl mx-auto mb-12">
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-stone-200">
+                    <h3 class="text-xl font-bold text-stone-800 mb-3 flex items-center"><span class="text-2xl mr-3">🏠</span> The Environment Gap</h3>
+                    <p class="text-stone-600">Students lack an English-speaking environment at home, making it nearly impossible to practice conversationally. This limits their fluency and confidence.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-stone-200">
+                    <h3 class="text-xl font-bold text-stone-800 mb-3 flex items-center"><span class="text-2xl mr-3">📱</span> The Distraction Dilemma</h3>
+                    <p class="text-stone-600">While mobile phones offer resources, they are also a primary source of distraction. A physical robot provides a focused, engaging, and dedicated learning companion.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-stone-200 md:col-span-2 lg:col-span-1">
+                    <h3 class="text-xl font-bold text-stone-800 mb-3 flex items-center"><span class="text-2xl mr-3">🌱</span> The Root of Future Learning</h3>
+                    <p class="text-stone-600">A strong foundation in English is essential for higher education in technology and innovation. By understanding the language, students can better grasp complex technical subjects.</p>
+                </div>
+            </div>
+             <div class="bg-teal-50 border-l-4 border-teal-500 p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold text-teal-700 mb-3">Our Mission: A Targeted Solution</h3>
+                <p class="text-stone-700">
+                    To empower students by deploying ANU 6.0: an accessible, AI-powered humanoid robot designed for <span class="highlight">distraction-free</span>, personalized learning. It serves as a mentor, a friend, and a gateway to new technology, speaking both English and Kannada.
+                </p>
+            </div>
+        </section>
+
+        <section id="features" class="mb-24 fade-in-section">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-stone-800 mb-12">Meet ANU 6.0: A New Kind of Companion</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-stone-200 lg:col-span-2 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                    <h3 class="text-xl font-bold text-stone-800 mb-2">🎓 A Personalized Mentor & Guide</h3>
+                    <p class="text-stone-600">ANU 6.0 doesn't use a one-size-fits-all approach. It assesses a student's level, creates a <span class="highlight">custom learning path</span>, and acts as a personal teacher. It provides access to new information and technology, guiding them through daily lessons in grammar and vocabulary.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl shadow-lg border border-stone-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                    <h3 class="text-xl font-bold text-stone-800 mb-2">🤝 An Intelligent Friend to Practice With</h3>
+                    <p class="text-stone-600">As a friendly companion, ANU 6.0 removes the fear of making mistakes. Students can practice English pronunciation <span class="highlight">without hesitation</span>. It speaks both Kannada and English, ensuring true understanding.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-stone-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                     <h3 class="text-xl font-bold text-stone-800 mb-2">🚀 An AI That Learns With You</h3>
+                    <p class="text-stone-600">Like modern AI assistants, ANU 6.0 <span class="highlight">learns from interactions</span>. The more a student talks to it, the better it adapts its teaching style, becoming a more effective guide over time.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl shadow-lg border border-stone-200 lg:col-span-2 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                    <h3 class="text-xl font-bold text-stone-800 mb-2">🤗 Engaging Physical Interaction</h3>
+                    <p class="text-stone-600">Beyond the screen, ANU 6.0 offers <span class="highlight">physical engagement</span>. It can gesture, wave, and even give a hug, creating a stronger bond than a digital tool. This physical presence helps maintain focus and makes learning fun.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="how" class="mb-24 fade-in-section">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-stone-800 mb-4">How It Works: An Interactive View</h2>
+            <p class="text-lg text-center text-stone-600 max-w-3xl mx-auto mb-12">ANU 6.0's system is a flow from perception to action. Click on any component in the diagram below to learn more about its role.</p>
+            
+            <div class="lg:grid lg:grid-cols-3 lg:gap-8 items-start">
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg border border-stone-200">
+                    <div id="architecture-diagram" class="flex flex-col md:flex-row justify-around items-center space-y-4 md:space-y-0 md:space-x-4 text-center">
+                        <div class="w-full md:w-1/3">
+                            <h4 class="font-bold mb-2">INPUT</h4>
+                            <div data-id="mic" class="diagram-box bg-blue-100 text-blue-800 p-3 rounded-lg cursor-pointer hover:bg-blue-200 transition-transform hover:scale-105">Microphone & Webcam</div>
+                            <div class="h-8 border-l-2 border-stone-300 mx-auto w-0"></div>
+                            <div data-id="sensors" class="diagram-box bg-blue-100 text-blue-800 p-3 rounded-lg cursor-pointer hover:bg-blue-200 transition-transform hover:scale-105">Sensors</div>
+                        </div>
+                        <div class="text-stone-400 text-4xl font-thin hidden md:block">→</div>
+                        <div class="w-full md:w-1/3">
+                            <h4 class="font-bold mb-2">PROCESSING</h4>
+                            <div data-id="rpi" class="diagram-box bg-green-100 text-green-800 p-3 rounded-lg cursor-pointer hover:bg-green-200 transition-transform hover:scale-105">Raspberry Pi 5</div>
+                            <div class="h-8 border-l-2 border-stone-300 mx-auto w-0"></div>
+                            <div data-id="ai" class="diagram-box bg-green-100 text-green-800 p-3 rounded-lg cursor-pointer hover:bg-green-200 transition-transform hover:scale-105">Core AI & Logic</div>
+                        </div>
+                         <div class="text-stone-400 text-4xl font-thin hidden md:block">→</div>
+                        <div class="w-full md:w-1/3">
+                            <h4 class="font-bold mb-2">OUTPUT</h4>
+                            <div data-id="servos" class="diagram-box bg-purple-100 text-purple-800 p-3 rounded-lg cursor-pointer hover:bg-purple-200 transition-transform hover:scale-105">Servos & Motors</div>
+                             <div class="h-8 border-l-2 border-stone-300 mx-auto w-0"></div>
+                            <div data-id="speaker" class="diagram-box bg-purple-100 text-purple-800 p-3 rounded-lg cursor-pointer hover:bg-purple-200 transition-transform hover:scale-105">Speaker</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="details-panel" class="lg:col-span-1 mt-8 lg:mt-0 bg-stone-200 p-6 rounded-2xl border border-stone-300 min-h-[200px]">
+                    <h3 id="details-title" class="text-xl font-bold text-stone-800 mb-2">Component Details</h3>
+                    <p id="details-content" class="text-stone-600">Click a component on the left to see its description here.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tech" class="mb-24 fade-in-section">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-stone-800 mb-12">Technology Stack</h2>
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-stone-200">
+                    <h3 class="text-2xl font-bold text-stone-800 mb-6 text-center">⚙️ Hardware</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start"><span class="bg-teal-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">Raspberry Pi 5:</span> The central brain for all processing.</div></li>
+                        <li class="flex items-start"><span class="bg-teal-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">17 DOF Servos:</span> MG995 motors for precise and powerful humanoid movements.</div></li>
+                        <li class="flex items-start"><span class="bg-teal-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">PCA9685 Driver:</span> Manages the 16+ servos smoothly without overloading the Pi.</div></li>
+                        <li class="flex items-start"><span class="bg-teal-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">Webcam & Mic:</span> The robot's eyes and ears for vision and speech recognition.</div></li>
+                        <li class="flex items-start"><span class="bg-teal-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">Sensors:</span> Ultrasonic, PIR, and Temperature sensors for environmental awareness.</div></li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-stone-200">
+                    <h3 class="text-2xl font-bold text-stone-800 mb-6 text-center">💻 Software</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start"><span class="bg-green-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">Python:</span> The core programming language for the entire system.</div></li>
+                        <li class="flex items-start"><span class="bg-green-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">OpenCV:</span> Powers face and object recognition capabilities.</div></li>
+                        <li class="flex items-start"><span class="bg-green-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">SpeechRecognition Libs:</span> For processing voice commands in both languages.</div></li>
+                        <li class="flex items-start"><span class="bg-green-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">SQLite:</span> An on-device database for storing knowledge, lessons, and user data.</div></li>
+                        <li class="flex items-start"><span class="bg-green-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">Custom AI Models:</span> Localized models for offline decision-making and interaction.</div></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="text-center mb-24 fade-in-section">
+            <h2 class="text-3xl md:text-4xl font-bold text-stone-800 mb-4">Project Impact & Vision</h2>
+            <p class="text-lg text-stone-600 max-w-3xl mx-auto mb-12">By being practical and offline-first, ANU 6.0 can create immediate and meaningful change.</p>
+            <div class="bg-white p-8 rounded-2xl shadow-lg border border-stone-200">
+                <div class="flex justify-center space-x-4 mb-8">
+                    <button data-type="social" class="impact-btn bg-teal-600 text-white px-5 py-2 rounded-full font-semibold transition-colors">Social</button>
+                    <button data-type="economic" class="impact-btn bg-stone-200 text-stone-700 px-5 py-2 rounded-full font-semibold transition-colors">Economic</button>
+                    <button data-type="technical" class="impact-btn bg-stone-200 text-stone-700 px-5 py-2 rounded-full font-semibold transition-colors">Technical</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="impactChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="future" class="text-center fade-in-section">
+             <h2 class="text-3xl md:text-4xl font-bold text-stone-800 mb-4">Our Vision for the Future</h2>
+            <p class="text-lg text-stone-600 max-w-3xl mx-auto mb-12">From a successful pilot in Karnataka to a nationwide educational movement, ANU 6.0 is designed to scale.</p>
+            <div class="grid md:grid-cols-2 gap-8 text-left">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-stone-200">
+                    <h3 class="text-2xl font-bold text-stone-800 mb-4">🇮🇳 Nationwide Expansion</h3>
+                    <p class="text-stone-600 mb-4">
+                        Our goal is to adapt ANU 6.0 for other states in India. The modular design allows us to incorporate new languages and cultural contexts, bringing personalized learning to rural students across the country.
+                    </p>
+                    <ul class="space-y-2 text-stone-600">
+                         <li class="flex items-center"><span class="text-green-500 mr-2">✔</span>Bilingual support for new regional languages.</li>
+                         <li class="flex items-center"><span class="text-green-500 mr-2">✔</span>Curriculum adapted to local educational standards.</li>
+                         <li class="flex items-center"><span class="text-green-500 mr-2">✔</span>Building a network of learning companions.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-stone-200">
+                    <h3 class="text-2xl font-bold text-stone-800 mb-4">🚀 Enhanced Capabilities</h3>
+                    <p class="text-stone-600 mb-4">
+                        The journey doesn't stop with language. We envision ANU 6.0 becoming a comprehensive educational tool that builds confidence and opens doors to new opportunities.
+                    </p>
+                    <ul class="space-y-2 text-stone-600">
+                         <li class="flex items-center"><span class="text-green-500 mr-2">✔</span>Advanced lessons in STEM subjects.</li>
+                         <li class="flex items-center"><span class="text-green-500 mr-2">✔</span>Career guidance and skill development modules.</li>
+                         <li class="flex items-center"><span class="text-green-500 mr-2">✔</span>Deeper AI integration for emotional intelligence.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-800 text-white mt-24">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2025 ANU 6.0 Project - Coorg Institute of Technology Ponnampet.</p>
+            <p class="text-stone-400 text-sm mt-2">An innovative solution for a connected future.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const componentDetails = {
+                mic: {
+                    title: '🎤 Microphone & Webcam',
+                    content: 'These are the primary perception tools. The microphone captures voice commands in English and Kannada, while the webcam provides visual input for face recognition, object detection, and gesture analysis using OpenCV.'
+                },
+                sensors: {
+                    title: '📡 Environmental Sensors',
+                    content: 'Includes Ultrasonic sensors for obstacle detection, PIR sensors for detecting human presence, and Temperature sensors. This data gives ANU 6.0 awareness of its immediate surroundings.'
+                },
+                rpi: {
+                    title: '🧠 Raspberry Pi 5',
+                    content: 'The powerful onboard computer that serves as the robot\'s brain. It runs all the software, processes inputs from sensors, makes decisions using the AI models, and sends commands to the motors and speaker.'
+                },
+                ai: {
+                    title: '💡 Core AI & Logic',
+                    content: 'This software module processes the incoming data. It uses SpeechRecognition libraries to understand commands, leverages the local SQLite database for knowledge, and employs custom AI models to decide on the appropriate response.'
+                },
+                servos: {
+                    title: '⚙️ Servos & Motors',
+                    content: 'The actuation module. 17 high-torque servo motors execute all physical movements like waving, hugging, and dancing. They are controlled by a PCA9685 PWM driver to ensure smooth, coordinated motion.'
+                },
+                speaker: {
+                    title: '🔊 Speaker',
+                    content: 'Provides the verbal output for the robot. The text-to-speech engine generates audio in the correct language, allowing ANU 6.0 to talk back, answer questions, and provide information.'
+                }
+            };
+
+            const diagramBoxes = document.querySelectorAll('.diagram-box');
+            const detailsTitle = document.getElementById('details-title');
+            const detailsContent = document.getElementById('details-content');
+
+            diagramBoxes.forEach(box => {
+                box.addEventListener('click', () => {
+                    const id = box.dataset.id;
+                    const details = componentDetails[id];
+                    detailsTitle.textContent = details.title;
+                    detailsContent.textContent = details.content;
+                    
+                    diagramBoxes.forEach(b => b.classList.remove('ring-2', 'ring-teal-500'));
+                    box.classList.add('ring-2', 'ring-teal-500');
+                });
+            });
+
+            const impactData = {
+                social: {
+                    labels: ['Reduce Education Gap', 'Alleviate Isolation', 'Increase Information Access'],
+                    values: [90, 75, 85]
+                },
+                economic: {
+                    labels: ['Enhance Student Skills', 'Improve Household Decisions', 'Enable New Opportunities'],
+                    values: [80, 70, 75]
+                },
+                technical: {
+                    labels: ['Practical On-Device AI', 'Bridge Theory & Application', 'Accessible Robotics'],
+                    values: [95, 85, 90]
+                }
+            };
+
+            const ctx = document.getElementById('impactChart').getContext('2d');
+            let impactChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: impactData.social.labels,
+                    datasets: [{
+                        label: 'Impact Score (out of 100)',
+                        data: impactData.social.values,
+                        backgroundColor: 'rgba(13, 148, 136, 0.6)',
+                        borderColor: 'rgba(13, 148, 136, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        },
+                        x: {
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const label = this.getLabelForValue(value);
+                                    return label.length > 16 ? label.substring(0, 16) + '...' : label;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            const impactButtons = document.querySelectorAll('.impact-btn');
+            impactButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const type = button.dataset.type;
+                    const newData = impactData[type];
+                    
+                    impactChart.data.labels = newData.labels;
+                    impactChart.data.datasets[0].data = newData.values;
+                    impactChart.update();
+
+                    impactButtons.forEach(btn => {
+                        btn.classList.remove('bg-teal-600', 'text-white');
+                        btn.classList.add('bg-stone-200', 'text-stone-700');
+                    });
+                    button.classList.add('bg-teal-600', 'text-white');
+                    button.classList.remove('bg-stone-200', 'text-stone-700');
+                });
+            });
+
+            const sections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+</body>
+</html>
+
