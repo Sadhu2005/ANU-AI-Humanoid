@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANU 6.0 - AI-Powered Educational Robot for Rural India</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --accent: #f97316;
+            --light: #f8fafc;
+            --dark: #1e293b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, #f8fafc, #e2e8f0);
+            background-attachment: fixed;
+            color: var(--dark);
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        
+        /* Animation classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tech-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .highlight {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+        
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background-color: rgba(37, 99, 235, 0.2);
+            z-index: -1;
+            transform: skewX(-15deg);
+            transition: all 0.3s ease;
+        }
+        
+        .highlight:hover::after {
+            height: 100%;
+            background-color: rgba(37, 99, 235, 0.3);
+        }
+        
+        .robot-arm {
+            position: absolute;
+            right: 5%;
+            top: 10%;
+            font-size: 3rem;
+            opacity: 0.8;
+            z-index: -1;
+        }
+        
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transform-origin: left;
+            transform: scaleX(0);
+            z-index: 1000;
+        }
+        
+        .typing-demo {
+            width: 22ch;
+            animation: typing 2s steps(22), blink .5s step-end infinite alternate;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid;
+            font-family: monospace;
+            font-size: 2em;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+        }
+            
+        @keyframes blink {
+            50% { border-color: transparent }
+        }
+        
+        .word-carousel {
+            overflow: hidden;
+            height: 40px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .word-carousel div {
+            position: absolute;
+            opacity: 0;
+            top: 0;
+            left: 0;
+            animation: rotate-word 16s linear infinite 0s;
+        }
+        
+        .word-carousel div:nth-child(2) { 
+            animation-delay: 4s; 
+        }
+        
+        .word-carousel div:nth-child(3) { 
+            animation-delay: 8s; 
+        }
+        
+        .word-carousel div:nth-child(4) { 
+            animation-delay: 12s; 
+        }
+        
+        @keyframes rotate-word {
+            0% { opacity: 0; transform: translateY(30px); }
+            2% { opacity: 1; transform: translateY(0px); }
+            18% { opacity: 1; transform: translateY(0px); }
+            20% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 0; }
+        }
+        
+        .hero-pattern {
+            background-color: #f8fafc;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232564eb' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .section-pattern {
+            background-color: #ffffff;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232564eb' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .floating-robot {
+            animation: floating 8s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translate(0, 0px) rotate(0deg); }
+            50% { transform: translate(0, -15px) rotate(5deg); }
+            100% { transform: translate(0, 0px) rotate(0deg); }
+        }
+        
+        .glow {
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .stagger-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .counter {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    
+    <div class="robot-arm float hidden md:block">
+        <i class="fas fa-robot text-blue-500"></i>
+    </div>
+
+    <header class="bg-white/90 backdrop-blur-lg sticky top-0 z-50 shadow-md">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-slate-800 flex items-center">
+                <span class="text-blue-600 mr-2 pulse"><i class="fas fa-robot"></i></span> 
+                <span class="gradient-text">ANU 6.0</span>
+            </h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#problem" class="text-slate-600 hover:text-blue-600 transition-colors font-medium">The Why</a>
+                <a href="#features" class="text-slate-600 hover:text-blue-600 transition-colors font-medium">Features</a>
+                <a href="#how" class="text-slate-600 hover:text-blue-600 transition-colors font-medium">The How</a>
+                <a href="#tech" class="text-slate-600 hover:text-blue-600 transition-colors font-medium">The Tech</a>
+                <a href="#impact" class="text-slate-600 hover:text-blue-600 transition-colors font-medium">The Impact</a>
+                <a href="#future" class="text-slate-600 hover:text-blue-600 transition-colors font-medium">The Future</a>
+            </div>
+            <button class="md:hidden text-slate-700" id="mobile-menu-button">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-white absolute top-full left-0 right-0 shadow-lg" id="mobile-menu">
+            <div class="flex flex-col p-4 space-y-4">
+                <a href="#problem" class="text-slate-600 hover:text-blue-600 transition-colors font-medium py-2">The Why</a>
+                <a href="#features" class="text-slate-600 hover:text-blue-600 transition-colors font-medium py-2">Features</a>
+                <a href="#how" class="text-slate-600 hover:text-blue-600 transition-colors font-medium py-2">The How</a>
+                <a href="#tech" class="text-slate-600 hover:text-blue-600 transition-colors font-medium py-2">The Tech</a>
+                <a href="#impact" class="text-slate-600 hover:text-blue-600 transition-colors font-medium py-2">The Impact</a>
+                <a href="#future" class="text-slate-600 hover:text-blue-600 transition-colors font-medium py-2">The Future</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+
+        <section id="hero" class="text-center mb-24 mt-8 hero-pattern rounded-3xl p-8 md:p-12 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-full opacity-10">
+                <div class="floating-robot absolute" style="top: 20%; left: 10%"><i class="fas fa-robot text-4xl text-blue-500"></i></div>
+                <div class="floating-robot absolute" style="top: 60%; left: 80%" style="animation-delay: 2s"><i class="fas fa-microchip text-3xl text-purple-500"></i></div>
+                <div class="floating-robot absolute" style="top: 30%; left: 85%" style="animation-delay: 4s"><i class="fas fa-brain text-3xl text-orange-500"></i></div>
+                <div class="floating-robot absolute" style="top: 70%; left: 15%" style="animation-delay: 6s"><i class="fas fa-graduation-cap text-3xl text-green-500"></i></div>
+            </div>
+            
+            <h1 class="text-5xl md:text-6xl font-bold text-slate-800 mb-6 fade-in">
+                Bridging Education Gaps with <span class="gradient-text">AI-Powered Robotics</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-600 max-w-4xl mx-auto mb-10 fade-in">
+                ANU 6.0 is a <span class="highlight">revolutionary humanoid robot</span> designed to provide personalized English education to rural students, breaking down barriers and opening new opportunities.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 fade-in mb-12">
+                <a href="#problem" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold transition-all transform hover:scale-105 shadow-lg">
+                    Explore The Project
+                </a>
+                <a href="#impact" class="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-full font-semibold transition-all shadow-sm">
+                    See The Impact
+                </a>
+                <a href="#future" class="bg-white text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-full font-semibold transition-all transform hover:scale-105 shadow-sm">
+                    Future Vision
+                </a>
+            </div>
+            
+            <div class="flex justify-center fade-in">
+                <div class="bg-white rounded-2xl p-6 shadow-lg max-w-4xl glow">
+                    <div class="flex flex-wrap justify-center gap-6 text-center">
+                        <div class="stagger-item">
+                            <div class="text-3xl font-bold text-blue-600 counter" data-target="17">0</div>
+                            <div class="text-sm text-slate-600">Degrees of Freedom</div>
+                        </div>
+                        <div class="stagger-item">
+                            <div class="text-3xl font-bold text-purple-600 counter" data-target="2">0</div>
+                            <div class="text-sm text-slate-600">Languages Supported</div>
+                        </div>
+                        <div class="stagger-item">
+                            <div class="text-3xl font-bold text-orange-600 counter" data-target="100">0</div>
+                            <div class="text-sm text-slate-600">Students Impacted</div>
+                        </div>
+                        <div class="stagger-item">
+                            <div class="text-3xl font-bold text-green-600 counter" data-target="24">0</div>
+                            <div class="text-sm text-slate-600">/7 Availability</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="problem" class="text-center mb-24 section-pattern rounded-3xl p-8">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-6 fade-in">The Challenge: A Deeper Look</h2>
+            <p class="text-lg md:text-xl text-slate-600 max-w-4xl mx-auto mb-12 fade-in">
+                For rural students, learning English is more than an academic exercise—it's a <span class="highlight">gateway to future opportunities</span>. However, several critical barriers stand in their way.
+            </p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-left max-w-6xl mx-auto mb-12">
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 fade-in tech-card">
+                    <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-home text-2xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">The Environment Gap</h3>
+                    <p class="text-slate-600">Students lack an English-speaking environment at home, making it nearly impossible to practice conversationally. This limits their fluency and confidence.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 fade-in tech-card">
+                    <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-mobile-alt text-2xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">The Distraction Dilemma</h3>
+                    <p class="text-slate-600">While mobile phones offer resources, they are also a primary source of distraction. A physical robot provides a focused, engaging, and dedicated learning companion.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 fade-in tech-card">
+                    <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-seedling text-2xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">The Foundation for Future Learning</h3>
+                    <p class="text-slate-600">A strong foundation in English is essential for higher education in technology and innovation. By understanding the language, students can better grasp complex technical subjects.</p>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto fade-in">
+                <h3 class="text-2xl font-bold mb-3">Our Mission: A Targeted Solution</h3>
+                <p>
+                    To empower students by deploying ANU 6.0: an <span class="font-bold">accessible, AI-powered humanoid robot</span> designed for distraction-free, personalized learning. It serves as a mentor, a friend, and a gateway to new technology, speaking both English and Kannada.
+                </p>
+            </div>
+        </section>
+
+        <section id="features" class="mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-800 mb-12 fade-in">Meet ANU 6.0: A New Kind of Companion</h2>
+            
+            <div class="flex flex-col lg:flex-row items-center gap-10 mb-16">
+                <div class="lg:w-1/2 fade-in">
+                    <div class="bg-gradient-to-br from-blue-100 to-purple-100 p-8 rounded-2xl shadow-lg">
+                        <div class="floating-robot text-center">
+                            <i class="fas fa-robot text-9xl text-blue-500"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2 fade-in">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">Why a Physical Robot?</h3>
+                    <p class="text-slate-600 mb-6">Unlike apps or software, ANU 6.0's physical presence creates a stronger emotional connection, reduces distractions, and enables interactive learning through gestures and movements that make education more engaging and memorable.</p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                            <div class="text-blue-500 text-2xl mb-2"><i class="fas fa-hands-helping"></i></div>
+                            <div class="font-semibold">Physical Interaction</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                            <div class="text-blue-500 text-2xl mb-2"><i class="fas fa-lock"></i></div>
+                            <div class="font-semibold">Distraction-Free</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                            <div class="text-blue-500 text-2xl mb-2"><i class="fas fa-heart"></i></div>
+                            <div class="font-semibold">Emotional Connection</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                            <div class="text-blue-500 text-2xl mb-2"><i class="fas fa-child"></i></div>
+                            <div class="font-semibold">Child-Friendly</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 lg:col-span-2 fade-in tech-card">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-graduation-cap text-xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">A Personalized Mentor & Guide</h3>
+                    <p class="text-slate-600">ANU 6.0 doesn't use a one-size-fits-all approach. It assesses a student's level, creates a custom learning path, and acts as a personal teacher. It provides access to new information and technology, guiding them through daily lessons in grammar and vocabulary.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 fade-in tech-card">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-handshake text-xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">An Intelligent Friend to Practice With</h3>
+                    <p class="text-slate-600">As a friendly companion, ANU 6.0 removes the fear of making mistakes. Students can practice English pronunciation without hesitation. It speaks both Kannada and English, explaining difficult concepts in the native language to ensure true understanding.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 fade-in tech-card">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-brain text-xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">An AI That Learns With You</h3>
+                    <p class="text-slate-600">Like modern AI assistants, ANU 6.0 learns from its interactions. The more a student talks to it, the better it understands their needs and adapts its teaching style, becoming a more effective guide over time.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 lg:col-span-2 fade-in tech-card">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-hands-helping text-xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Engaging Physical Interaction</h3>
+                    <p class="text-slate-600">Beyond the screen, ANU 6.0 offers physical engagement. It can gesture, wave, and even give a hug, creating a stronger, more memorable bond than a purely digital tool. This physical presence helps maintain focus and makes learning more fun and interactive.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 fade-in tech-card">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-wifi text-xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Offline-First Design</h3>
+                    <p class="text-slate-600">Specifically designed for areas with limited internet connectivity, ANU 6.0 works primarily offline, using on-device AI models. It only needs occasional internet access for updates and syncing.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="how" class="mb-24 section-pattern rounded-3xl p-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-800 mb-4 fade-in">How It Works: An Interactive View</h2>
+            <p class="text-lg text-center text-slate-600 max-w-3xl mx-auto mb-12 fade-in">ANU 6.0's system is a flow from perception to action. Click on any component in the diagram below to learn more about its role in the process.</p>
+            
+            <div class="lg:grid lg:grid-cols-3 lg:gap-8 items-start">
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg border border-slate-200 fade-in">
+                    <div id="architecture-diagram" class="flex flex-col md:flex-row justify-around items-center space-y-4 md:space-y-0 md:space-x-4 text-center">
+                        <div class="w-full md:w-1/3">
+                            <h4 class="font-bold mb-2 text-blue-600">INPUT</h4>
+                            <div data-id="mic" class="diagram-box bg-blue-100 text-blue-800 p-3 rounded-lg cursor-pointer hover:bg-blue-200 transition transform hover:scale-105 mb-4">
+                                <i class="fas fa-microphone mr-2"></i>Microphone & Webcam
+                            </div>
+                            <div data-id="sensors" class="diagram-box bg-blue-100 text-blue-800 p-3 rounded-lg cursor-pointer hover:bg-blue-200 transition transform hover:scale-105">
+                                <i class="fas fa-satellite-dish mr-2"></i>Sensors
+                            </div>
+                        </div>
+                        
+                        <div class="text-blue-400 text-4xl font-thin hidden md:block pulse"><i class="fas fa-arrow-right"></i></div>
+                        
+                        <div class="w-full md:w-1/3">
+                            <h4 class="font-bold mb-2 text-green-600">PROCESSING</h4>
+                            <div data-id="rpi" class="diagram-box bg-green-100 text-green-800 p-3 rounded-lg cursor-pointer hover:bg-green-200 transition transform hover:scale-105 mb-4">
+                                <i class="fas fa-microchip mr-2"></i>Raspberry Pi 5
+                            </div>
+                            <div data-id="ai" class="diagram-box bg-green-100 text-green-800 p-3 rounded-lg cursor-pointer hover:bg-green-200 transition transform hover:scale-105">
+                                <i class="fas fa-robot mr-2"></i>Core AI & Logic
+                            </div>
+                        </div>
+                        
+                        <div class="text-blue-400 text-4xl font-thin hidden md:block pulse"><i class="fas fa-arrow-right"></i></div>
+                        
+                        <div class="w-full md:w-1/3">
+                            <h4 class="font-bold mb-2 text-purple-600">OUTPUT</h4>
+                            <div data-id="servos" class="diagram-box bg-purple-100 text-purple-800 p-3 rounded-lg cursor-pointer hover:bg-purple-200 transition transform hover:scale-105 mb-4">
+                                <i class="fas fa-cogs mr-2"></i>Servos & Motors
+                            </div>
+                            <div data-id="speaker" class="diagram-box bg-purple-100 text-purple-800 p-3 rounded-lg cursor-pointer hover:bg-purple-200 transition transform hover:scale-105">
+                                <i class="fas fa-volume-up mr-2"></i>Speaker
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="details-panel" class="lg:col-span-1 mt-8 lg:mt-0 bg-blue-50 p-6 rounded-2xl border border-blue-200 min-h-[200px] fade-in">
+                    <h3 id="details-title" class="text-xl font-bold text-blue-800 mb-2">Component Details</h3>
+                    <p id="details-content" class="text-slate-700">Click a component on the left to see its description here.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tech" class="mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-800 mb-12 fade-in">Technology Stack</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 fade-in tech-card">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 text-center"><i class="fas fa-cogs text-blue-500 mr-2"></i> Hardware</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start"><span class="bg-blue-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">Raspberry Pi 5:</span> The central brain for all processing.</div></li>
+                        <li class="flex items-start"><span class="bg-blue-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">17 DOF Servos:</span> MG995 motors for precise and powerful humanoid movements.</div></li>
+                        <li class="flex items-start"><span class="bg-blue-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">PCA9685 Driver:</span> Manages the 16+ servos smoothly without overloading the Pi.</div></li>
+                        <li class="flex items-start"><span class="bg-blue-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">Webcam & Mic:</span> The robot's eyes and ears for vision and speech recognition.</div></li>
+                        <li class="flex items-start"><span class="bg-blue-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">Sensors:</span> Ultrasonic, PIR, and Temperature sensors for environmental awareness.</div></li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 fade-in tech-card">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 text-center"><i class="fas fa-code text-green-500 mr-2"></i> Software</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start"><span class="bg-green-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">Python:</span> The core programming language for the entire system.</div></li>
+                        <li class="flex items-start"><span class="bg-green-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">OpenCV:</span> Powers face and object recognition capabilities.</div></li>
+                        <li class="flex items-start"><span class="bg-green-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">SpeechRecognition Libs:</span> For processing voice commands in both languages.</div></li>
+                        <li class="flex items-start"><span class="bg-green-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">SQLite:</span> An on-device database for storing knowledge, lessons, and user data.</div></li>
+                        <li class="flex items-start"><span class="bg-green-500 rounded-full w-3 h-3 mt-1.5 mr-3 flex-shrink-0"></span><div><span class="font-semibold">Custom AI Models:</span> Localized models for offline decision-making and interaction.</div></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="text-center mb-24 section-pattern rounded-3xl p-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 fade-in">Project Impact & Vision</h2>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-12 fade-in">By being practical and offline-first, ANU 6.0 can create immediate and meaningful change.</p>
+            
+            <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 fade-in">
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <button data-type="social" class="impact-btn bg-blue-600 text-white px-5 py-2 rounded-full font-semibold transition-all transform hover:scale-105">
+                        <i class="fas fa-users mr-2"></i>Social
+                    </button>
+                    <button data-type="economic" class="impact-btn bg-slate-200 text-slate-700 px-5 py-2 rounded-full font-semibold transition-all transform hover:scale-105">
+                        <i class="fas fa-chart-line mr-2"></i>Economic
+                    </button>
+                    <button data-type="technical" class="impact-btn bg-slate-200 text-slate-700 px-5 py-2 rounded-full font-semibold transition-all transform hover:scale-105">
+                        <i class="fas fa-microchip mr-2"></i>Technical
+                    </button>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="impactChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="future" class="text-center mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 fade-in">Our Vision for the Future</h2>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-12 fade-in">From a successful pilot in Karnataka to a nationwide educational movement, ANU 6.0 is designed to scale.</p>
+            
+            <div class="grid md:grid-cols-2 gap-8 text-left">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 fade-in tech-card">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4"><i class="fas fa-flag text-blue-500 mr-2"></i> Nationwide Expansion</h3>
+                    <p class="text-slate-600 mb-4">
+                        Our goal is to adapt ANU 6.0 for other states in India. The modular design allows us to incorporate new languages and cultural contexts, bringing personalized learning to rural students across the country.
+                    </p>
+                    <ul class="space-y-2 text-slate-600">
+                        <li class="flex items-center"><span class="text-green-500 mr-2"><i class="fas fa-check-circle"></i></span>Bilingual support for new regional languages.</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2"><i class="fas fa-check-circle"></i></span>Curriculum adapted to local educational standards.</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2"><i class="fas fa-check-circle"></i></span>Building a network of learning companions.</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 fade-in tech-card">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4"><i class="fas fa-rocket text-blue-500 mr-2"></i> Enhanced Capabilities</h3>
+                    <p class="text-slate-600 mb-4">
+                        The journey doesn't stop with language. We envision ANU 6.0 becoming a comprehensive educational tool that builds confidence and opens doors to new opportunities.
+                    </p>
+                    <ul class="space-y-2 text-slate-600">
+                        <li class="flex items-center"><span class="text-green-500 mr-2"><i class="fas fa-check-circle"></i></span>Advanced lessons in STEM subjects.</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2"><i class="fas fa-check-circle"></i></span>Career guidance and skill development modules.</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2"><i class="fas fa-check-circle"></i></span>Deeper AI integration for emotional intelligence.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="call-to-action" class="text-center mb-24 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-12 rounded-3xl shadow-xl">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Join Us in Transforming Education</h2>
+            <p class="text-xl max-w-3xl mx-auto mb-8">ANU 6.0 represents a new frontier in educational technology - one that's accessible, personalized, and designed for those who need it most.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#" class="bg-white text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-full font-semibold transition-all transform hover:scale-105">
+                    <i class="fas fa-handshake mr-2"></i>Partner With Us
+                </a>
+                <a href="#" class="bg-transparent border-2 border-white hover:bg-white/10 px-6 py-3 rounded-full font-semibold transition-all">
+                    <i class="fas fa-download mr-2"></i>Download Project Brief
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-white mt-24">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                        <span class="text-blue-400 mr-2"><i class="fas fa-robot"></i></span> 
+                        ANU 6.0
+                    </h3>
+                    <p class="text-slate-400 mb-4">An innovative AI-powered educational robot designed to bridge the language and technology gap for rural students in India.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-slate-400 hover:text-white transition-colors"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white transition-colors"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white transition-colors"><i class="fab fa-github fa-lg"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-white transition-colors"><i class="fab fa-youtube fa-lg"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#problem" class="text-slate-400 hover:text-white transition-colors">The Problem</a></li>
+                        <li><a href="#features" class="text-slate-400 hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#tech" class="text-slate-400 hover:text-white transition-colors">Technology</a></li>
+                        <li><a href="#impact" class="text-slate-400 hover:text-white transition-colors">Impact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <address class="text-slate-400 not-italic">
+                        <div class="mb-2"><i class="fas fa-map-marker-alt mr-2"></i> Sadhu J</div>
+                        <div class="mb-2"><i class="fas fa-envelope mr-2"></i> sadhuj2005@gmail.com</div>
+                        <div><i class="fas fa-phone mr-2"></i> +91 7022154730</div>
+                    </address>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-700 mt-8 pt-8 text-center text-slate-400">
+                <p>&copy; 2025 ANU 6.0 Project -Sadhu J, Praju K K & Janavi H M. Students at Coorg Institute of Technology Ponnampet. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Scroll progress indicator
+            const scrollIndicator = document.getElementById('scrollIndicator');
+            window.addEventListener('scroll', () => {
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight - windowHeight;
+                const scrollPercentage = (window.scrollY / documentHeight) * 100;
+                scrollIndicator.style.transform = `scaleX(${scrollPercentage / 100})`;
+            });
+            
+            // Fade-in animation on scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const appearOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -100px 0px"
+            };
+            
+            const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('appear');
+                    appearOnScroll.unobserve(entry.target);
+                });
+            }, appearOptions);
+            
+            fadeElements.forEach(element => {
+                appearOnScroll.observe(element);
+            });
+            
+            // Stagger animation for counter items
+            const staggerItems = document.querySelectorAll('.stagger-item');
+            const staggerOptions = {
+                threshold: 0.5,
+                rootMargin: "0px 0px -50px 0px"
+            };
+            
+            const staggerObserver = new IntersectionObserver(function(entries, staggerObserver) {
+                entries.forEach((entry, index) => {
+                    if (!entry.isIntersecting) return;
+                    
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                        
+                        // Animate counters if it's a counter element
+                        if (entry.target.querySelector('.counter')) {
+                            animateCounter(entry.target.querySelector('.counter'));
+                        }
+                    }, index * 200);
+                    
+                    staggerObserver.unobserve(entry.target);
+                });
+            }, staggerOptions);
+            
+            staggerItems.forEach(item => {
+                staggerObserver.observe(item);
+            });
+            
+            // Counter animation
+            function animateCounter(element) {
+                const target = parseInt(element.getAttribute('data-target'));
+                const duration = 2000; // ms
+                const frameDuration = 1000 / 60; // 60 fps
+                const totalFrames = Math.round(duration / frameDuration);
+                let frame = 0;
+                
+                const counter = setInterval(() => {
+                    frame++;
+                    const progress = frame / totalFrames;
+                    const currentCount = Math.round(target * progress);
+                    
+                    if (parseInt(element.innerText) !== currentCount) {
+                        element.innerText = currentCount;
+                    }
+                    
+                    if (frame === totalFrames) {
+                        clearInterval(counter);
+                    }
+                }, frameDuration);
+            }
+            
+            // Component details functionality
+            const componentDetails = {
+                mic: {
+                    title: '🎤 Microphone & Webcam',
+                    content: 'These are the primary perception tools. The microphone captures voice commands in English and Kannada, while the webcam provides visual input for face recognition, object detection, and gesture analysis using OpenCV.'
+                },
+                sensors: {
+                    title: '📡 Environmental Sensors',
+                    content: 'Includes Ultrasonic sensors for obstacle detection, PIR sensors for detecting human presence, and Temperature sensors. This data gives ANU 6.0 awareness of its immediate surroundings.'
+                },
+                rpi: {
+                    title: '🧠 Raspberry Pi 5',
+                    content: 'The powerful onboard computer that serves as the robot\'s brain. It runs all the software, processes inputs from sensors, makes decisions using the AI models, and sends commands to the motors and speaker.'
+                },
+                ai: {
+                    title: '💡 Core AI & Logic',
+                    content: 'This software module processes the incoming data. It uses SpeechRecognition libraries to understand commands, leverages the local SQLite database for knowledge, and employs custom AI models to decide on the appropriate response.'
+                },
+                servos: {
+                    title: '⚙️ Servos & Motors',
+                    content: 'The actuation module. 17 high-torque servo motors execute all physical movements like waving, hugging, and dancing. They are controlled by a PCA9685 PWM driver to ensure smooth, coordinated motion.'
+                },
+                speaker: {
+                    title: '🔊 Speaker',
+                    content: 'Provides the verbal output for the robot. The text-to-speech engine generates audio in the correct language, allowing ANU 6.0 to talk back, answer questions, and provide information.'
+                }
+            };
+
+            const diagramBoxes = document.querySelectorAll('.diagram-box');
+            const detailsTitle = document.getElementById('details-title');
+            const detailsContent = document.getElementById('details-content');
+
+            diagramBoxes.forEach(box => {
+                box.addEventListener('click', () => {
+                    const id = box.dataset.id;
+                    const details = componentDetails[id];
+                    detailsTitle.textContent = details.title;
+                    detailsContent.textContent = details.content;
+                    
+                    diagramBoxes.forEach(b => b.classList.remove('ring-2', 'ring-blue-500'));
+                    box.classList.add('ring-2', 'ring-blue-500');
+                });
+            });
+
+            // Impact chart functionality
+            const impactData = {
+                social: {
+                    labels: ['Reduce Education Gap', 'Alleviate Isolation', 'Increase Information Access'],
+                    values: [90, 75, 85]
+                },
+                economic: {
+                    labels: ['Enhance Student Skills', 'Improve Household Decisions', 'Enable New Opportunities'],
+                    values: [80, 70, 75]
+                },
+                technical: {
+                    labels: ['Practical On-Device AI', 'Bridge Theory & Application', 'Accessible Robotics'],
+                    values: [95, 85, 90]
+                }
+            };
+
+            const ctx = document.getElementById('impactChart').getContext('2d');
+            let impactChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: impactData.social.labels,
+                    datasets: [{
+                        label: 'Impact Score (out of 100)',
+                        data: impactData.social.values,
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        },
+                        x: {
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const label = this.getLabelForValue(value);
+                                    return label.length > 16 ? label.substring(0, 16) + '...' : label;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            const impactButtons = document.querySelectorAll('.impact-btn');
+            impactButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const type = button.dataset.type;
+                    const newData = impactData[type];
+                    
+                    impactChart.data.labels = newData.labels;
+                    impactChart.data.datasets[0].data = newData.values;
+                    impactChart.update();
+
+                    impactButtons.forEach(btn => {
+                        btn.classList.remove('bg-blue-600', 'text-white');
+                        btn.classList.add('bg-slate-200', 'text-slate-700');
+                    });
+                    button.classList.add('bg-blue-600', 'text-white');
+                    button.classList.remove('bg-slate-200', 'text-slate-700');
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
