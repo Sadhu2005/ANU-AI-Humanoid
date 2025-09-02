@@ -258,8 +258,8 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 ## 📞 Contact
 For questions or support, please contact:
-- **Project Lead**: [Your Name] - [your.email@example.com]
-- **Development Team**: [team.email@example.com]
+- **Project Lead**: Sadhu J - https://sadhujdeveloper.com
+- **Development Team**: https://anuai.sadhujdeveloper.com
 
 ---
 
