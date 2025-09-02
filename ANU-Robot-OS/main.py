@@ -10,14 +10,16 @@ try:
     import os
     import sys
     from collections import deque
+    from dotenv import load_dotenv
 except ImportError as e:
     print(f"Missing required package: {e}")
     print("Please install required packages using: pip install SpeechRecognition pyaudio requests pywin32")
     sys.exit(1)
 
+load_dotenv()
 # Configuration
-GEMINI_API_KEY = " "  # Replace with your actual API key
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
+GEMINI_API_KEY = os.getenv("DEEPSEEK_API_KEY")
+GEMINI_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 class AdvancedVoiceAssistant:
     def __init__(self):
