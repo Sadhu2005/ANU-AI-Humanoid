@@ -16,7 +16,7 @@ except ImportError as e:
     sys.exit(1)
 
 # Configuration
-GEMINI_API_KEY = "AIzaSyCGni1SM5BLet2L7kwwtXdrWyVed4dzcdA"  # Replace with your actual API key
+GEMINI_API_KEY = " "  # Replace with your actual API key
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
 
 class AdvancedVoiceAssistant:
