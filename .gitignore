@@ -1,2 +1,10 @@
+# Virtual Environment
 venv/
-./ANU-Robot-OS/.env
+__pycache__/
+
+# Environment variables
+.env
+
+# Optional: If data/models are large and managed elsewhere
+# data/
+# models/
