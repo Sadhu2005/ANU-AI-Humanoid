@@ -286,6 +286,56 @@
             transform: translateX(0);
         }
 
+        /* Video Modal Styles */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .video-modal.active {
+            display: flex;
+        }
+        
+        .video-container {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .close-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
         @media (max-width: 768px) {
             .timeline::before {
                 left: 2rem;
@@ -306,6 +356,21 @@
 
     <!-- Particle Background -->
     <div id="particles-js"></div>
+
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="video-modal">
+      
+        <div class="video-container">
+            <button class="close-btn" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <video id="modalVideo" controls width="800" height="450">
+                <source src="demo-video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
 
     <!-- Navigation -->
     <nav class="nav-blur fixed top-0 w-full z-50 px-6 py-4">
@@ -353,30 +418,51 @@
 
     <!-- Hero Section -->
     <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
-        <div class="hero-gradient absolute inset-0 opacity-20"></div>
-        
-        <div class="relative z-10 text-center px-6 max-w-6xl mx-auto">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 glitch-text">
-                <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-yellow-400 bg-clip-text text-transparent">
-                    ANU 6.0
-                </span>
-            </h1>
-            <p class="text-xl md:text-2xl mb-4 typing-effect">
-                Artificial Neural Universe
-            </p>
-            <p class="text-lg md:text-xl text-gray-400 mb-8 scroll-reveal">
-                Revolutionizing rural education through AI-powered humanoid robotics
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4 justify-center scroll-reveal">
-                <button class="px-8 py-4 bg-gradient-to-r from-primary to-secondary rounded-full font-semibold hover:scale-105 transition-transform glow">
-                    <i class="fas fa-play mr-2"></i> Watch Demo
-                </button>
-                <a href="#problem" class="px-8 py-4 border-2 border-primary rounded-full font-semibold hover:bg-primary hover:text-white transition-all">
-                    <i class="fas fa-book mr-2"></i> Learn More
-                </a>
-            </div>
-            
+  <div class="hero-gradient absolute inset-0 opacity-20"></div>
+
+  <div class="relative z-10 px-6 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+    
+    <!-- Left Side: Smaller Video -->
+   <div class="video-container" style="max-width: 500px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+    <video controls  muted loop class="video-player">
+      <source src="airobodempo.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <style>
+    
+  </style>
+
+    <!-- Right Side: Text -->
+    <div class="w-full md:w-1/2 text-center md:text-left">
+      <h1 class="text-5xl md:text-6xl font-bold mb-6 glitch-text">
+        <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-yellow-400 bg-clip-text text-transparent">
+          ANU 6.0
+        </span>
+      </h1>
+      <p class="text-xl md:text-2xl mb-4 typing-effect">
+        Artificial Neural Universe
+      </p>
+      <p class="text-lg md:text-xl text-gray-400 mb-8 scroll-reveal">
+        Revolutionizing rural education through AI-powered humanoid robotics
+      </p>
+
+      <!-- Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start scroll-reveal">
+        <button onclick="openModal()" 
+                class="px-8 py-4 bg-gradient-to-r from-primary to-secondary rounded-full font-semibold hover:scale-105 transition-transform glow inline-flex items-center">
+          <i class="fas fa-play mr-2"></i> Watch Demo
+        </button>
+        <a href="#problem" 
+           class="px-8 py-4 border-2 border-primary rounded-full font-semibold hover:bg-primary hover:text-white transition-all inline-flex items-center">
+          <i class="fas fa-book mr-2"></i> Learn More
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
             <!-- Stats -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 scroll-reveal">
@@ -952,9 +1038,11 @@
                     <button class="px-8 py-4 bg-white text-dark rounded-full font-semibold hover:scale-105 transition-transform">
                         <i class="fas fa-handshake mr-2"></i> Partner With Us
                     </button>
-                    <button class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-dark transition-all">
-                        <i class="fas fa-download mr-2"></i> Download Whitepaper
-                    </button>
+                    <a href="ANU 6.0.pdf" download
+   class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-dark transition-all inline-flex items-center">
+   <i class="fas fa-download mr-2"></i> Download Whitepaper
+</a>
+
                 </div>
             </div>
         </div>
@@ -1007,6 +1095,35 @@
     </footer>
 
     <script>
+        // Video Modal Functions
+        function openModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            modal.classList.add('active');
+            video.currentTime = 0; // Start from beginning
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            modal.classList.remove('active');
+            video.pause();
+        }
+        
+        // Close modal when clicking outside the video
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
         // Initialize particle background
         particlesJS('particles-js', {
             particles: {
